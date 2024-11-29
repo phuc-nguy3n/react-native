@@ -1,6 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Button,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 export default function App() {
   const [students, setStudents] = useState([
@@ -24,13 +32,53 @@ export default function App() {
       name: "VIP",
       age: 23,
     },
+    {
+      id: 4,
+      name: "VIP",
+      age: 23,
+    },
+    {
+      id: 5,
+      name: "VIP",
+      age: 23,
+    },
+    {
+      id: 6,
+      name: "VIP",
+      age: 23,
+    },
+    {
+      id: 7,
+      name: "VIP",
+      age: 23,
+    },
+    {
+      id: 8,
+      name: "VIP",
+      age: 23,
+    },
   ]);
 
   return (
     <View style={styles.container}>
-      {students.map((item) => (
-        <Text>{item.name}</Text>
-      ))}
+      <Text style={{ fontSize: 60 }}>Hello world</Text>
+      <FlatList
+        data={students}
+        keyExtractor={(item) => item.id + ""}
+        renderItem={({ item }) => {
+          return (
+            <View
+              style={{
+                padding: 30,
+                backgroundColor: "pink",
+                marginBottom: 30,
+              }}
+            >
+              <Text>{item.name}</Text>
+            </View>
+          );
+        }}
+      ></FlatList>
     </View>
   );
 }
