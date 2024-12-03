@@ -1,14 +1,17 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import {
+  Alert,
   Button,
   FlatList,
+  Keyboard,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -30,133 +33,142 @@ export default function App() {
   };
 
   return (
-    <SafeAreaView>
-      <View>
-        <Text style={styles.header}>Todo App</Text>
-
-        {/* Form */}
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <SafeAreaView style={styles.container}>
         <View>
-          <TextInput
-            style={styles.todoInput}
-            value={todoInput}
-            onChangeText={(text) => setTodoInput(text)}
-          />
-          <View style={styles.todoButton}>
-            <Button
-              title="Add todo"
-              onPress={() => {
-                if (todoInput) {
-                  const todoID = totoList.length;
+          <Text style={styles.header}>Todo App</Text>
 
-                  const todoTask = {
-                    id: todoID,
-                    name: todoInput.trim(),
-                  };
-                  setTodoList([...totoList, todoTask]);
-                  setTodoInput("");
-                } else {
-                  alert("Empty todo");
-                  return;
-                }
-              }}
+          {/* Form */}
+          <View>
+            <TextInput
+              style={styles.todoInput}
+              value={todoInput}
+              onChangeText={(text) => setTodoInput(text)}
             />
+            <View style={styles.todoButton}>
+              <Button
+                title="Add todo"
+                onPress={() => {
+                  if (todoInput) {
+                    const todoID = totoList.length;
+
+                    const todoTask = {
+                      id: todoID,
+                      name: todoInput.trim(),
+                    };
+                    setTodoList([...totoList, todoTask]);
+                    setTodoInput("");
+                  } else {
+                    Alert.alert("Lỗi input todo", "Todo không được để trống", [
+                      {
+                        text: "Ok",
+                      },
+                      // {
+                      //   text: "Hủy",
+                      // },
+                    ]);
+                    return;
+                  }
+                }}
+              />
+            </View>
+          </View>
+
+          {/* List to do */}
+          <View style={{ marginTop: 30, marginHorizontal: 15 }}>
+            <Text style={{ marginBottom: 10 }}>List to do:</Text>
+            <FlatList
+              data={totoList}
+              keyExtractor={(item, index) => index + ""}
+              renderItem={({ item }) => {
+                const isEditing = editingTodoId === item.id;
+
+                return (
+                  <View
+                    style={{
+                      padding: 30,
+                      backgroundColor: "pink",
+                      marginBottom: 10,
+                    }}
+                  >
+                    {isEditing ? (
+                      <TextInput
+                        style={{
+                          marginBottom: 10,
+                          textAlign: "center",
+                          fontSize: 18,
+                          borderBottomWidth: 1,
+                          borderColor: "gray",
+                        }}
+                        value={editingInput}
+                        onChangeText={(text) => setEditingInput(text)}
+                      />
+                    ) : (
+                      <Text
+                        style={{
+                          marginBottom: 10,
+                          textAlign: "center",
+                          fontSize: 18,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {item.name}
+                      </Text>
+                    )}
+
+                    <Button
+                      title={isEditing ? "Cập nhật" : "Chỉnh sửa"}
+                      onPress={() => {
+                        if (isEditing) {
+                          // Xử lý cập nhật
+                          if (editingInput.trim()) {
+                            setTodoList(
+                              totoList.map((todo) =>
+                                todo.id === item.id
+                                  ? { ...todo, name: editingInput.trim() }
+                                  : todo
+                              )
+                            );
+                          }
+                          // Kết thúc chỉnh sửa
+                          setEditingTodoId(null);
+                          setEditingInput("");
+                        } else {
+                          // Bắt đầu chỉnh sửa
+                          setEditingTodoId(item.id);
+                          setEditingInput(item.name);
+                        }
+                      }}
+                    />
+
+                    <Pressable
+                      style={({ pressed }) => ({
+                        marginTop: 10,
+                        padding: 10,
+                        backgroundColor: "red",
+                        borderRadius: 2,
+                        opacity: pressed ? 0.5 : 1,
+                      })}
+                      onPress={() => deleteTodo(item.id)}
+                    >
+                      <Text
+                        style={{
+                          textAlign: "center",
+                          color: "white",
+                          fontWeight: "semibold",
+                        }}
+                      >
+                        Xóa
+                      </Text>
+                    </Pressable>
+                  </View>
+                );
+              }}
+            ></FlatList>
           </View>
         </View>
-
-        {/* List to do */}
-        <View style={{ marginTop: 30, marginHorizontal: 15 }}>
-          <Text style={{ marginBottom: 10 }}>List to do:</Text>
-          <FlatList
-            data={totoList}
-            keyExtractor={(item, index) => index + ""}
-            renderItem={({ item }) => {
-              const isEditing = editingTodoId === item.id;
-
-              return (
-                <View
-                  style={{
-                    padding: 30,
-                    backgroundColor: "pink",
-                    marginBottom: 10,
-                  }}
-                >
-                  {isEditing ? (
-                    <TextInput
-                      style={{
-                        marginBottom: 10,
-                        textAlign: "center",
-                        fontSize: 18,
-                        borderBottomWidth: 1,
-                        borderColor: "gray",
-                      }}
-                      value={editingInput}
-                      onChangeText={(text) => setEditingInput(text)}
-                    />
-                  ) : (
-                    <Text
-                      style={{
-                        marginBottom: 10,
-                        textAlign: "center",
-                        fontSize: 18,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {item.name}
-                    </Text>
-                  )}
-
-                  <Button
-                    title={isEditing ? "Cập nhật" : "Chỉnh sửa"}
-                    onPress={() => {
-                      if (isEditing) {
-                        // Xử lý cập nhật
-                        if (editingInput.trim()) {
-                          setTodoList(
-                            totoList.map((todo) =>
-                              todo.id === item.id
-                                ? { ...todo, name: editingInput.trim() }
-                                : todo
-                            )
-                          );
-                        }
-                        // Kết thúc chỉnh sửa
-                        setEditingTodoId(null);
-                        setEditingInput("");
-                      } else {
-                        // Bắt đầu chỉnh sửa
-                        setEditingTodoId(item.id);
-                        setEditingInput(item.name);
-                      }
-                    }}
-                  />
-
-                  <Pressable
-                    style={({ pressed }) => ({
-                      marginTop: 10,
-                      padding: 10,
-                      backgroundColor: "red",
-                      borderRadius: 2,
-                      opacity: pressed ? 0.5 : 1,
-                    })}
-                    onPress={() => deleteTodo(item.id)}
-                  >
-                    <Text
-                      style={{
-                        textAlign: "center",
-                        color: "white",
-                        fontWeight: "semibold",
-                      }}
-                    >
-                      Xóa
-                    </Text>
-                  </Pressable>
-                </View>
-              );
-            }}
-          ></FlatList>
-        </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -170,8 +182,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: 50,
-    paddingHorizontal: 20,
     backgroundColor: "#fff",
     // alignItems: "center",
     // justifyContent: "center",
