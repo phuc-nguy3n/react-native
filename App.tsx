@@ -3,10 +3,12 @@ import { useState } from "react";
 import {
   Button,
   FlatList,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -52,6 +54,9 @@ export default function App() {
                   };
                   setTodoList([...totoList, todoTask]);
                   setTodoInput("");
+                } else {
+                  alert("Empty todo");
+                  return;
                 }
               }}
             />
@@ -125,9 +130,26 @@ export default function App() {
                     }}
                   />
 
-                  <View style={{ marginTop: 10 }}>
-                    <Button title="Xóa" onPress={() => deleteTodo(item.id)} />
-                  </View>
+                  <Pressable
+                    style={({ pressed }) => ({
+                      marginTop: 10,
+                      padding: 10,
+                      backgroundColor: "red",
+                      borderRadius: 2,
+                      opacity: pressed ? 0.5 : 1,
+                    })}
+                    onPress={() => deleteTodo(item.id)}
+                  >
+                    <Text
+                      style={{
+                        textAlign: "center",
+                        color: "white",
+                        fontWeight: "semibold",
+                      }}
+                    >
+                      Xóa
+                    </Text>
+                  </Pressable>
                 </View>
               );
             }}
