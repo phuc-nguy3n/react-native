@@ -1,10 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { OPENSANT } from "../../utils/const";
 
 const styles = StyleSheet.create({
   review: {
     fontSize: 30,
-    fontFamily: "OpenSans",
+    fontFamily: OPENSANT,
   },
 });
 

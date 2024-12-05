@@ -7,12 +7,13 @@ import HomeScreen from "./components/review/home";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { OPENSANT } from "./utils/const";
 
 SplashScreen.preventAutoHideAsync();
 
 function App() {
   const [loaded, error] = useFonts({
-    OpenSans: require("./assets/fonts/OpenSans-Regular.ttf"),
+    [OPENSANT]: require("./assets/fonts/OpenSans-Regular.ttf"),
   });
   useEffect(() => {
     if (loaded || error) {
