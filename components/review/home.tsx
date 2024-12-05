@@ -1,10 +1,30 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
+import { Button } from "@react-navigation/elements";
 
-function HomeScreen() {
+function HomeScreen({ navigation }: any) {
   return (
     <View>
-      <Text>Home screen</Text>
+      <Pressable
+        style={({ pressed }) => ({
+          marginTop: 10,
+          padding: 10,
+          backgroundColor: "blue",
+          borderRadius: 2,
+          opacity: pressed ? 0.5 : 1,
+        })}
+        onPress={() => navigation.navigate("Details")}
+      >
+        <Text
+          style={{
+            textAlign: "center",
+            color: "white",
+            fontWeight: "semibold",
+          }}
+        >
+          Go to details
+        </Text>
+      </Pressable>
     </View>
   );
 }

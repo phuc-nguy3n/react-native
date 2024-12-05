@@ -37,7 +37,7 @@ function App() {
           options={{ title: "Trang chủ" }}
         />
         <Stack.Screen
-          name="Review details"
+          name="Details"
           component={DetailsScreen}
           options={{ title: "Đánh giá" }}
         />
