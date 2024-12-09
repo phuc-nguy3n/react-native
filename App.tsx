@@ -11,6 +11,7 @@ import { OPENSANT } from "./utils/const";
 import { NavigationContainer } from "@react-navigation/native";
 
 import AppNavigation from "./components/navigation/app.navigation";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,9 +30,11 @@ function App() {
   }
 
   return (
-    <NavigationContainer>
-      <AppNavigation />
-    </NavigationContainer>
+    <SafeAreaView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <AppNavigation />
+      </NavigationContainer>
+    </SafeAreaView>
   );
 }
 
