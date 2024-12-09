@@ -7,15 +7,12 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { OPENSANT } from "./utils/const";
-import { createStackNavigator } from "@react-navigation/stack";
+
 import { NavigationContainer } from "@react-navigation/native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import "./gesture-handler";
+
+import AppNavigation from "./components/navigation/app.navigation";
 
 SplashScreen.preventAutoHideAsync();
-
-const Stack = createStackNavigator();
-const Drawer = createDrawerNavigator();
 
 function App() {
   const [loaded, error] = useFonts({
@@ -33,22 +30,7 @@ function App() {
 
   return (
     <NavigationContainer>
-      {/* <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: "Trang chủ" }}
-        />
-        <Stack.Screen
-          name="Details"
-          component={DetailsScreen}
-          options={{ title: "Đánh giá" }}
-        />
-      </Stack.Navigator> */}
-      <Drawer.Navigator>
-        <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="About" component={AboutScreen} />
-      </Drawer.Navigator>
+      <AppNavigation />
     </NavigationContainer>
   );
 }
