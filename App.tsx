@@ -9,10 +9,13 @@ import { useEffect } from "react";
 import { OPENSANT } from "./utils/const";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import "./gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
 function App() {
   const [loaded, error] = useFonts({
@@ -30,7 +33,7 @@ function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      {/* <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Home"
           component={HomeScreen}
@@ -41,7 +44,11 @@ function App() {
           component={DetailsScreen}
           options={{ title: "Đánh giá" }}
         />
-      </Stack.Navigator>
+      </Stack.Navigator> */}
+      <Drawer.Navigator>
+        <Drawer.Screen name="Home" component={HomeScreen} />
+        <Drawer.Screen name="About" component={AboutScreen} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }
