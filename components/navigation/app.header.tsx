@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   headerText: {
-    width: "100%",
+    flex: 1,
     textAlign: "center",
     fontSize: 24,
     fontWeight: "600",
