@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import { Button } from "@react-navigation/elements";
+import AppHeader from "../navigation/app.header";
 
 interface IReview {
   id: number;
