@@ -10,8 +10,8 @@ import {
 import CreateModal from "./create.modal";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-interface IReview {
-  id: number;
+export interface IReview {
+  id: string;
   title: string;
   star: number;
 }
@@ -37,12 +37,12 @@ function HomeScreen({ navigation }: any) {
 
   const [reviews, setReviews] = useState<IReview[]>([
     {
-      id: 0,
+      id: "0",
       title: "React Native",
       star: 5,
     },
     {
-      id: 1,
+      id: "1",
       title: "Phuc Nguyen",
       star: 5,
     },
@@ -95,6 +95,8 @@ function HomeScreen({ navigation }: any) {
       <CreateModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        reviews={reviews}
+        setReviews={setReviews}
       />
     </View>
   );

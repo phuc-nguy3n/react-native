@@ -10,6 +10,10 @@ import {
   Keyboard,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { IReview } from "./home";
+import { Dispatch, SetStateAction, useState } from "react";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 const styles = StyleSheet.create({
   container: {
@@ -47,10 +51,35 @@ const styles = StyleSheet.create({
 interface IProps {
   modalVisible: boolean;
   setModalVisible: (v: boolean) => void;
+  reviews: IReview[];
+  setReviews: Dispatch<SetStateAction<IReview[]>>;
 }
 
 function CreateModal(props: Readonly<IProps>) {
-  const { modalVisible, setModalVisible } = props;
+  const { modalVisible, setModalVisible, reviews, setReviews } = props;
+
+  const [title, setTitle] = useState("");
+  const [rating, setRating] = useState(5);
+
+  const turnOffModel = () => {
+    setTitle("");
+    setRating(5);
+    setModalVisible(false);
+  };
+
+  const addReview = (title: string, rating: number) => {
+    const uid = uuidv4();
+
+    turnOffModel();
+    setReviews([
+      {
+        id: uid,
+        title: title,
+        star: rating,
+      },
+      ...reviews,
+    ]);
+  };
 
   return (
     <>
@@ -62,7 +91,7 @@ function CreateModal(props: Readonly<IProps>) {
               <Text style={{ fontSize: 25 }}>Create a review</Text>
 
               <AntDesign
-                onPress={() => setModalVisible(false)}
+                onPress={() => turnOffModel()}
                 name="close"
                 size={24}
                 color="black"
@@ -73,18 +102,41 @@ function CreateModal(props: Readonly<IProps>) {
             <View>
               <View style={styles.groupInput}>
                 <Text style={styles.text}>Title</Text>
-                <TextInput style={styles.input} />
+                <TextInput
+                  style={styles.input}
+                  value={title}
+                  onChangeText={(text) => setTitle(text)}
+                />
               </View>
 
               <View style={styles.groupInput}>
                 <Text style={styles.text}>Rating</Text>
-                <TextInput style={styles.input} keyboardType="numeric" />
+                <TextInput
+                  style={styles.input}
+                  keyboardType="numeric"
+                  value={rating?.toString()}
+                  onChangeText={(text) => {
+                    const numericValue = text.replace(/[^0-5]/g, "");
+                    if (
+                      Number(numericValue) >= 1 &&
+                      Number(numericValue) <= 5
+                    ) {
+                      setRating(parseInt(numericValue));
+                    } else if (numericValue === "") {
+                      setRating(0);
+                    }
+                  }}
+                />
               </View>
             </View>
 
             {/* Footer */}
             <View>
-              <Button title="Add" />
+              <Button
+                disabled={title.trim() === ""}
+                onPress={() => addReview(title, rating)}
+                title="Add"
+              />
             </View>
           </View>
         </TouchableWithoutFeedback>
